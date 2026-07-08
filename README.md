@@ -1,45 +1,63 @@
 <h1 align="center">
-   Meu quadro de tarefas
+   📝 Meu Quadro de Tarefas (Task Board)
 </h1>
 
-## 💻 Repositório
+<p align="center">
+  <img src="https://img.shields.io/badge/Angular-19-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular 19">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Material_Design-v19-0081CB?style=for-the-badge&logo=angular-material&logoColor=white" alt="Angular Material">
+</p>
 
-[Meu quadro de tarefas](https://github.com/lucasspeixoto/my-task-board.git) é o projeto de desenvolvido em uma playlist do canal [Descomplicando a prática](https://www.youtube.com/channel/UC6LY6Xw5ff_KaHwjHWRA9oA?sub_confirmation=1) no youtube onde vamos construir um toDo app completo com
-intregração a backend usando as novas features que surgiram nas versões 16, 17 e 18 do angular.
+## 📌 Sobre o Projeto
 
-Se você está começando com o framework ou ainda precisa aprender o que chegou de novo no angular, se [inscreva](https://www.youtube.com/channel/UC6LY6Xw5ff_KaHwjHWRA9oA?sub_confirmation=1) e desenvolva esse projeto comigo.
+Este repositório foi criado para documentar, praticar e consolidar os meus estudos no ecossistema **Angular 19**. Utilizando como ponto de partida o template base do canal *Descomplicando a Prática*, reconstruí toda a arquitetura lógica do To-Do Application para entender a fundo o fluxo e gerenciamento de dados no Front-end.
 
-## ✨ Tecnologias
+O grande objetivo deste projeto foi ir além de apenas "criar telas", focando em **separação de responsabilidades**, criação de serviços reativos e manipulação imutável de estados.
 
-O projeto foi desenvolvido com as seguintes tecnologias:
+---
 
-- [Angular](https://angular.dev/)
-- [Tailwind Css](https://tailwindcss.com/docs/installation)
-- [Material Design](https://material.angular.io/)
+## 🧠 Conceitos Praticados & Aprendizados
 
-## 📑 Simulação do app
+Durante o desenvolvimento das funcionalidades de listagem, criação, atualização (check) e deleção de tarefas, apliquei conceitos fundamentais de engenharia de software no ecossistema moderno do Angular:
+
+* **Arquitetura em Camadas (Service vs Component):** Aprendi a isolar as regras de negócio e o estado da aplicação em um **Serviço Centralizado (Chef de Cozinha)**, deixando os componentes como meros **repassadores de eventos (Garçons)**.
+* **Angular Signals (Reatividade Moderna):** Utilização de `signal()` para gerenciar o estado das tarefas de forma síncrona na memória, eliminando a complexidade desnecessária e aplicando `computed()` para contadores dinâmicos.
+* **Manipulação de Arrays com JavaScript:** Consolidação prática de métodos imutáveis:
+  * `.filter()` para deletar itens e filtrar por categorias, garantindo a redução precisa da lista.
+  * `.map()` para alternar o status de conclusão das tarefas sem quebrar a estrutura do array.
+* **Two-Way Data Binding (`[(ngModel)]`):** Aplicação prática do conceito de "Lousa Mágica" para sincronização automática de formulários em tempo real com o TypeScript.
+* **Estilos Dinâmicos:** Renderização de tags de categorias utilizando injeção dinâmica de propriedades CSS (`[style.background-color]`).
+* **Consumo de APIs com HttpClient:** Compreensão de requisições assíncronas assentes na arquitetura do Angular.
+
+---
+
+## ✨ Tecnologias Utilizadas
+
+- **[Angular 19](https://angular.dev/)** — Framework base focado em componentes standalone.
+- **[Tailwind CSS](https://tailwindcss.com/)** — Para estilização ágil e utilitária da interface.
+- **[Angular Material](https://material.angular.io/)** — Componentes visuais de design como o `mat-divider`.
+
+---
+
+## 📑 Demonstração do App
 ![Login](public/app_demo.gif 'Demo')
 
+---
 
-## 🚀 Instalação
-
-Segue projeto no github pronto para usar de template e desenvolver o seu próprio: https://github.com/lucasspeixoto/my-task-board-template
+## 🚀 Como Rodar o Meu Projeto Localmente
 
 ```bash
-# Clone o repositório
-$ git clone https://github.com/lucasspeixoto/my-task-board-template
+# 1. Clone o repositório para a sua máquina
+$ git clone [https://github.com/Debfront/my-task-board-angular.git](https://github.com/Debfront/my-task-board-angular.git)
 
-# Entre na pasta do projeto
-$ cd my-task-board-template
+# 2. Acesse a pasta do projeto
+$ cd my-task-board-angular
 
-# Instalação bibliotecas
+# 3. Instale as dependências necessárias
 $ npm install
 
-# Iniciando projeto
+# 4. Certifique-se de iniciar o seu servidor backend/mock local (ex: porta 3000)
+# $ npm run server
+
+# 5. Inicie o servidor de desenvolvimento do Angular
 $ npm start
-
-```
-
-## 📝 Licença
-
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](https://opensource.org/licenses/MIT) para obter mais detalhes.
