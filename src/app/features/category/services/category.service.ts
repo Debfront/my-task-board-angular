@@ -1,8 +1,8 @@
 import { Category } from '../model/category.model';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
-import {toSignal} from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +19,4 @@ export class CategoryService {
   public categories = toSignal(this.categories$, {
     initialValue: [] as Category[],
   });
-
 }
