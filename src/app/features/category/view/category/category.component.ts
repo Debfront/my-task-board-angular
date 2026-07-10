@@ -1,5 +1,10 @@
 import { CategoryService } from './../../services/category.service';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core'; // 1. Importe o OnInit
 import { MainListComponent } from '../../components/main-list/main-list.component';
 import { ColorsListComponent } from '../../components/colors-list/colors-list.component';
 
@@ -8,7 +13,7 @@ const COMPONENTS = [MainListComponent, ColorsListComponent];
 @Component({
   selector: 'app-category',
   standalone: true,
-  imports: [...COMPONENTS], // Removido o ...PIPES daqui
+  imports: [...COMPONENTS],
   template: `
     <div class="flex flex-col justify-between itens-center h-full w-full">
       <app-main-list />
@@ -18,6 +23,12 @@ const COMPONENTS = [MainListComponent, ColorsListComponent];
   styles: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit {
+  // 2. Adicione o "implements OnInit"
   private readonly categoryService = inject(CategoryService);
+
+  ngOnInit(): void {
+    // 3. Dispara a requisição ao carregar a tela
+    this.categoryService.getCategories().subscribe();
+  }
 }
