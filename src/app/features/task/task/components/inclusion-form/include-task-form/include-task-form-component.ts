@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from '../../../../../category/services/category.service';
 
@@ -28,7 +28,7 @@ const MODDULES = [
 
     <mat-form-field>
       <mat-label>Categoria</mat-label>
-      <mat-select>
+      <mat-select (selectionChange)="selectionChangeHandler($event)">
         @for (category of categories(); track category.id) {
           <mat-option value="{{ category.id }}">
             {{ category.name }}
@@ -44,4 +44,10 @@ export class IncludeTaskFormComponent {
   private readonly categoryService = inject(CategoryService);
 
   public readonly categories = this.categoryService.categories;
+
+  public selectionChangeHandler(event: MatSelectChange): void {
+    const categoryId = event.value;
+
+    this.categoryService.selectedCategoryId.set(categoryId);
+  }
 }
