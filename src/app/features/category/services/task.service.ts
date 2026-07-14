@@ -16,6 +16,8 @@ export class TaskService {
 
   public readonly _apiUrl = environment.apiUrl;
 
+  public isLoading = signal(false);
+
   public getTasks(): Observable<Task[]> {
     return this._httpClient.get<Task[]>(`${this._apiUrl}/tasks`).pipe(
       tap(tasks => {
@@ -26,9 +28,13 @@ export class TaskService {
   }
 
   public insertATasksInTheTasksList(newTask: Task): void {
-    const updatedTasks = [...this.tasks(), newTask];
-    const sortedTasks = this.getSortedTasks(updatedTasks);
-    this.tasks.set(sortedTasks);
+    // const updatedTasks = [...this.tasks(), newTask];
+    // const sortedTasks = this.getSortedTasks(updatedTasks);
+    // this.tasks.set(sortedTasks);
+    this.tasks.update(tasks => {
+      const newTaskList = [...tasks, newTask];
+      return this.getSortedTasks(newTaskList);
+    });
   }
 
   public createTask(task: Partial<Task>): Observable<Task> {
