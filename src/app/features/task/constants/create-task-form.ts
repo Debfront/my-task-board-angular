@@ -1,0 +1,31 @@
+import { inject } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  NonNullableFormBuilder,
+  Validators,
+} from '@angular/forms';
+
+type TaskFormControl = {
+  title: FormControl<string>;
+  categoryId: FormControl<string>;
+};
+
+export function createTaskForm(): FormGroup<TaskFormControl> {
+  const formBuilder = inject(NonNullableFormBuilder);
+
+  return formBuilder.group({
+    title: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+    categoryId: new FormControl('1', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+  });
+}
+
+export type TaskFormGroup = ReturnType<typeof createTaskForm>;
+
+export type TaskFormValue = ReturnType<TaskFormGroup['getRawValue']>;

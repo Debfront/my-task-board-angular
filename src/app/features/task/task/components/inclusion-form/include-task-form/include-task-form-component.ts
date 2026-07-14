@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from '../../../../../category/services/category.service';
+import { createTaskForm } from '../../../../constants/create-task-form';
+import { TaskService } from '../../../../../category/services/task.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 const MODDULES = [
   MatFormFieldModule,
@@ -19,16 +27,26 @@ const MODDULES = [
   selector: 'app-include-task-form',
   standalone: true,
   imports: [...MODDULES],
-  template: `<form autocomplete="off" class="flex flex-row gap-2 select-none">
+  template: `<form
+    autocomplete="off"
+    class="flex flex-row gap-2 select-none"
+    [formGroup]="newTaskForm">
     <mat-form-field class="w-full">
       <mat-label>Tarefa</mat-label>
-      <input matInput placeholder="Adicionar tarefa" />
+      <input
+        formControlName="title"
+        matInput
+        placeholder="Adicionar tarefa"
+        (keyup.enter)="onEnterToAddTask()" />
       <mat-hint class="text-tertiary">Aperte enter para adicionar</mat-hint>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Categoria</mat-label>
-      <mat-select (selectionChange)="selectionChangeHandler($event)">
+      <mat-select
+        formControlName="categoryId"
+        (selectionChange)="selectionChangeHandler($event)"
+        (keyup.enter)="onEnterToAddTask()">
         @for (category of categories(); track category.id) {
           <mat-option value="{{ category.id }}">
             {{ category.name }}
@@ -43,11 +61,40 @@ const MODDULES = [
 export class IncludeTaskFormComponent {
   private readonly categoryService = inject(CategoryService);
 
+  private readonly taskService = inject(TaskService);
+
   public readonly categories = this.categoryService.categories;
+
+  public newTaskForm = createTaskForm();
+
+  public destroy$ = inject(DestroyRef);
 
   public selectionChangeHandler(event: MatSelectChange): void {
     const categoryId = event.value;
 
     this.categoryService.selectedCategoryId.set(categoryId);
+  }
+
+  public onEnterToAddTask(): void {
+    if (!this.newTaskForm.valid) return;
+
+    const { title, categoryId } = this.newTaskForm.value;
+
+    const newTask = {
+      title,
+      categoryId,
+      isCompleted: false,
+    };
+
+    this.taskService
+      .createTask(newTask)
+      .pipe(takeUntilDestroyed(this.destroy$))
+      .subscribe({
+        next: task => this.taskService.insertATasksInTheTasksList(task),
+        error: error => {
+          throw new Error(error.message);
+        },
+        complete: () => alert('Tarefa incluida!'),
+      });
   }
 }
