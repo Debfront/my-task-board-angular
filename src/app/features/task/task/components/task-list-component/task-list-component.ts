@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../category/services/task.service';
-// 1. IMPORTANTE: Importe o seu CategoryService (ajuste o caminho se necessário)
 import { CategoryService } from '../../../../category/services/category.service';
 import { DeleteTaskComponent } from '../delete-task.component/delete-task.component';
 import { UpdateTaskComponent } from '../update-task.component/update-task.component';
@@ -20,10 +19,8 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
     <div class="mt-8">
       @if (numberOfTasks() > 0) {
         @for (task of tasks(); track task.id) {
-          <!-- Container de cada tarefa -->
           <div
             class="flex flex-row justify-between items-center mb-4 p-2 rounded hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
-            <!-- Lado Esquerdo: Checkbox + Texto da Tarefa -->
             <div class="flex flex-row items-center gap-4">
               <app-update-task [task]="task" />
 
@@ -39,7 +36,6 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
               </span>
             </div>
 
-            <!-- Lado Direito: Botão de Deletar -->
             <app-delete-task [taskId]="task.id" />
           </div>
         }
@@ -55,7 +51,6 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
 })
 export class TaskListComponent implements OnInit {
   private readonly tasksService = inject(TaskService);
-  // 2. Injeta o serviço que gerencia as categorias
   private readonly categoryService = inject(CategoryService);
 
   public tasks = this.tasksService.tasks;
@@ -65,16 +60,11 @@ export class TaskListComponent implements OnInit {
     this.tasksService.getTasks().subscribe();
   }
 
-  /**
-   * 3. Método auxiliar para descobrir a cor da categoria com base no ID
-   */
   public getCategoryColor(categoryId: string): string {
-    // Busca a categoria correspondente na lista do seu CategoryService
     const category = this.categoryService
       .categories()
       .find(c => c.id === categoryId);
 
-    // Retorna a cor da categoria encontrada ou uma cor padrão (cinza/currentColor) se não achar
     return category ? category.color : 'currentColor';
   }
 }

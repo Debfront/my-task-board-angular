@@ -5,7 +5,6 @@ import { TaskListComponent } from './components/task-list-component/task-list-co
 @Component({
   selector: 'app-task',
   standalone: true,
-  // 1. Coloque os componentes importados DIRETAMENTE aqui:
   imports: [InclusionFormComponent, TaskListComponent],
   template: `
     <div class="flex flex-col mx-10">
