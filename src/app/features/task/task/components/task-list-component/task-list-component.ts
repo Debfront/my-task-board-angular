@@ -1,42 +1,63 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../category/services/task.service';
-import { AsyncPipe } from '@angular/common';
+import { DeleteTaskComponent } from '../delete-task.component/delete-task.component';
+import { UpdateTaskComponent } from '../update-task.component/update-task.component';
 import { NoTaskComponent } from '../no-task-component/no-task-component';
 
 @Component({
-  selector: 'app-task-list-component',
+  selector: 'app-task-list',
   standalone: true,
-  imports: [AsyncPipe, NoTaskComponent],
+  imports: [NgClass, NoTaskComponent, UpdateTaskComponent, DeleteTaskComponent],
   template: `
     <div class="mt-8">
-      @if (tasks$ | async) {
-        @if (numberOfTasks() > 0) {
-          @for (task of tasks(); track task.id) {
-            <div class="flex flex-row justify-start mb-4 items-center gap-4">
-              <span>{{ task.title }}</span>
-              <!-- <app-update-task /> -->
-              <!-- <app-delete-task /> -->
+      <!-- Agora validamos diretamente o Signal de tarefas -->
+      @if (numberOfTasks() > 0) {
+        @for (task of tasks(); track task.id) {
+          <!-- Container de cada tarefa -->
+          <div
+            class="flex flex-row justify-between items-center mb-4 p-2 rounded hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors">
+            <!-- Lado Esquerdo: Checkbox + Texto da Tarefa -->
+            <div class="flex flex-row items-center gap-4">
+              <app-update-task [task]="task" />
+
+              <span
+                [ngClass]="{
+                  'line-through text-gray-400': task.isCompleted,
+                  'text-gray-800 dark:text-gray-100': !task.isCompleted,
+                }">
+                {{ task.title }}
+              </span>
             </div>
-          }
-        } @else {
-          <app-no-task-component
-            alt="Nenhuma tarefa adicionada"
-            imageUrl="no_data.svg"
-            message="Nenhuma tarefa adicionada 😔 " />
+
+            <!-- Lado Direito: Botão de Deletar -->
+            <app-delete-task [taskId]="task.id" />
+          </div>
         }
+      } @else {
+        <app-no-task-component
+          alt="Nenhuma tarefa adicionada"
+          imageUrl="no_data.svg"
+          message="Nenhuma tarefa adicionada 😔" />
       }
     </div>
   `,
-  styles: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskListComponent {
-  private tasksService = inject(TaskService);
+export class TaskListComponent implements OnInit {
+  private readonly tasksService = inject(TaskService);
 
-  public tasks$ = this.tasksService.getTasks();
-
+  // Expõe os signals diretamente para o template
   public tasks = this.tasksService.tasks;
-
   public numberOfTasks = this.tasksService.numberOfTasks;
+
+  ngOnInit(): void {
+    // Dispara a busca inicial das tarefas do servidor para popular o Signal
+    this.tasksService.getTasks().subscribe();
+  }
 }

@@ -1,42 +1,5 @@
 {
-  "tasks": [
-    {
-      "id": "076d",
-      "title": "ler",
-      "categoryId": "1",
-      "isCompleted": false
-    },
-    {
-      "id": "571f",
-      "title": "ler",
-      "categoryId": "1",
-      "isCompleted": false
-    },
-    {
-      "id": "e9e2",
-      "title": "ler",
-      "categoryId": "1",
-      "isCompleted": false
-    },
-    {
-      "id": "68a1",
-      "title": "LER",
-      "categoryId": "1",
-      "isCompleted": false
-    },
-    {
-      "id": "9102",
-      "title": "ler",
-      "categoryId": "1",
-      "isCompleted": false
-    },
-    {
-      "id": "47a5",
-      "title": "ler",
-      "categoryId": "1",
-      "isCompleted": false
-    }
-  ],
+  "tasks": [],
   "categories": [
     {
       "id": "1",
