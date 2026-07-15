@@ -6,6 +6,8 @@ import {
 } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../category/services/task.service';
+// 1. IMPORTANTE: Importe o seu CategoryService (ajuste o caminho se necessário)
+import { CategoryService } from '../../../../category/services/category.service';
 import { DeleteTaskComponent } from '../delete-task.component/delete-task.component';
 import { UpdateTaskComponent } from '../update-task.component/update-task.component';
 import { NoTaskComponent } from '../no-task-component/no-task-component';
@@ -16,7 +18,6 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
   imports: [NgClass, NoTaskComponent, UpdateTaskComponent, DeleteTaskComponent],
   template: `
     <div class="mt-8">
-      <!-- Agora validamos diretamente o Signal de tarefas -->
       @if (numberOfTasks() > 0) {
         @for (task of tasks(); track task.id) {
           <!-- Container de cada tarefa -->
@@ -26,11 +27,14 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
             <div class="flex flex-row items-center gap-4">
               <app-update-task [task]="task" />
 
+              <!-- ATUALIZADO: Busca a cor dinamicamente pelo ID da categoria -->
               <span
                 [ngClass]="{
-                  'line-through text-gray-400': task.isCompleted,
-                  'text-gray-800 dark:text-gray-100': !task.isCompleted,
-                }">
+                  'line-through opacity-50': task.isCompleted,
+                  'font-medium': !task.isCompleted,
+                }"
+                [style.color]="getCategoryColor(task.categoryId)"
+                class="text-lg transition-all">
                 {{ task.title }}
               </span>
             </div>
@@ -51,13 +55,26 @@ import { NoTaskComponent } from '../no-task-component/no-task-component';
 })
 export class TaskListComponent implements OnInit {
   private readonly tasksService = inject(TaskService);
+  // 2. Injeta o serviço que gerencia as categorias
+  private readonly categoryService = inject(CategoryService);
 
-  // Expõe os signals diretamente para o template
   public tasks = this.tasksService.tasks;
   public numberOfTasks = this.tasksService.numberOfTasks;
 
   ngOnInit(): void {
-    // Dispara a busca inicial das tarefas do servidor para popular o Signal
     this.tasksService.getTasks().subscribe();
+  }
+
+  /**
+   * 3. Método auxiliar para descobrir a cor da categoria com base no ID
+   */
+  public getCategoryColor(categoryId: string): string {
+    // Busca a categoria correspondente na lista do seu CategoryService
+    const category = this.categoryService
+      .categories()
+      .find(c => c.id === categoryId);
+
+    // Retorna a cor da categoria encontrada ou uma cor padrão (cinza/currentColor) se não achar
+    return category ? category.color : 'currentColor';
   }
 }

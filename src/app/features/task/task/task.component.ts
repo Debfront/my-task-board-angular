@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { InclusionFormComponent } from './components/inclusion-form/inclusion-form-component';
 import { TaskListComponent } from './components/task-list-component/task-list-component';
 
-
 @Component({
   selector: 'app-task',
   standalone: true,
